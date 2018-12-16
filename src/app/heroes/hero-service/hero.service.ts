@@ -16,18 +16,8 @@ export class HeroService {
               private http: HttpClient) { }
 
   getHeroes(): Observable<any> {
-    return this.http.get<any>('http://localhost:3000/api/heroes1')
-      .pipe(catchError(this.handleError));
-  }
-
-  private handleError(errorResponse: HttpErrorResponse) {
-    if (errorResponse.error instanceof ErrorEvent) {
-      console.error('Client Side Error: ', errorResponse.error.message);
-    } else {
-      console.error('Server Side Error: ', errorResponse);
-    }
-
-    return throwError('There is a problem with the service.');
+    return this.http.get<any>('http://localhost:3000/api/heroes')
+      .pipe(catchError(err => of(`Error: ${err}`)));
   }
 
   getHero(id: number): Observable<IHero> {
