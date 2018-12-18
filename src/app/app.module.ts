@@ -7,6 +7,8 @@ import { MessagesComponent } from './messages/messages.component';
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import {HeroesModule} from './heroes/heroes.module';
 import {DashboardModule} from './dashboard/dashboard.module';
+import {HeroService} from './heroes/hero-service/hero.service';
+import {MessageService} from './messages/message-service/message.service';
 
 @NgModule({
   imports: [
@@ -21,6 +23,8 @@ import {DashboardModule} from './dashboard/dashboard.module';
     AppComponent,
     MessagesComponent
   ],
-  bootstrap: [ AppComponent ]
+  bootstrap: [ AppComponent ],
+  providers: [HeroService,
+  MessageService]
 })
 export class AppModule { }
