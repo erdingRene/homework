@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { IHero } from './hero';
-import { HeroService } from './hero-service/hero.service';
-import { Subject } from 'rxjs';
+import { HeroService } from './hero.service';
+import {Subject, Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-heroes',
@@ -10,7 +10,7 @@ import { Subject } from 'rxjs';
   styleUrls: ['./heroes.component.scss']
 })
 export class HeroesComponent implements OnInit, OnDestroy {
-  private ngUnsubscribe = new Subject();
+  private heroSubs: Subscription;
   heroes: IHero[];
 
   constructor(private heroService: HeroService) { }
@@ -20,9 +20,9 @@ export class HeroesComponent implements OnInit, OnDestroy {
   }
 
   getHeroes(): void {
-    this.heroService.getHeroes().pipe(
-      takeUntil(this.ngUnsubscribe))
-      .subscribe(heroes => this.heroes = heroes);
+      this.heroSubs = this.heroService.getHeroes().subscribe(heroes => this.heroes = heroes, (e) => {
+        console.error(e);
+      });
   }
 
   trackByHeroID (index: number, hero: any): number {
@@ -30,8 +30,7 @@ export class HeroesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
+    this.heroSubs.unsubscribe();
   }
 
 }
